@@ -8,7 +8,7 @@ import GamePage from './pages/GamePage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/sudoku-game">
       <SudokuProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
