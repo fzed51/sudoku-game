@@ -87,3 +87,33 @@
   border-color: var(--color-primary);
   color: #fff;
 }
+
+.scores {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--color-highlight);
+  border-radius: 12px;
+  padding: 10px 20px;
+  min-width: 200px;
+}
+
+.scoreRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.scoreLabel {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.scoreValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-given);
+  letter-spacing: 0.05em;
+}

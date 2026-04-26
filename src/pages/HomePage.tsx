@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSudoku } from '../context/SudokuContext';
 import { type Difficulty } from '../utils/sudokuGenerator';
+import { getBestScores, type BestScores } from '../utils/scoreManager';
 import styles from './HomePage.module.css';
 
 const DIFFICULTIES: { value: Difficulty; label: string }[] = [
@@ -18,10 +19,21 @@ function getSavedDifficulty(): Difficulty {
   return 'medium';
 }
 
+function formatTime(s: number): string {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
 export default function HomePage() {
   const navigate = useNavigate();
   const { newGame } = useSudoku();
   const [difficulty, setDifficulty] = useState<Difficulty>(getSavedDifficulty);
+  const [scores, setScores] = useState<BestScores>(() => getBestScores(getSavedDifficulty()));
+
+  useEffect(() => {
+    setScores(getBestScores(difficulty));
+  }, [difficulty]);
 
   function handleDifficulty(d: Difficulty) {
     setDifficulty(d);
@@ -67,6 +79,16 @@ export default function HomePage() {
               {label}
             </button>
           ))}
+        </div>
+        <div className={styles.scores}>
+          <div className={styles.scoreRow}>
+            <span className={styles.scoreLabel}>Meilleur</span>
+            <span className={styles.scoreValue}>{scores.allTime !== null ? formatTime(scores.allTime) : '–'}</span>
+          </div>
+          <div className={styles.scoreRow}>
+            <span className={styles.scoreLabel}>Cette semaine</span>
+            <span className={styles.scoreValue}>{scores.weekly !== null ? formatTime(scores.weekly) : '–'}</span>
+          </div>
         </div>
         <button className={styles.startBtn} onClick={handleStart}>
           Démarrer une partie
