@@ -1,13 +1,35 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSudoku } from '../context/SudokuContext';
+import { type Difficulty } from '../utils/sudokuGenerator';
 import styles from './HomePage.module.css';
+
+const DIFFICULTIES: { value: Difficulty; label: string }[] = [
+  { value: 'easy', label: 'Facile' },
+  { value: 'medium', label: 'Moyen' },
+  { value: 'hard', label: 'Difficile' },
+];
+
+const STORAGE_KEY = 'sudoku-difficulty';
+
+function getSavedDifficulty(): Difficulty {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === 'easy' || saved === 'medium' || saved === 'hard') return saved;
+  return 'medium';
+}
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { newGame } = useSudoku();
+  const [difficulty, setDifficulty] = useState<Difficulty>(getSavedDifficulty);
+
+  function handleDifficulty(d: Difficulty) {
+    setDifficulty(d);
+    localStorage.setItem(STORAGE_KEY, d);
+  }
 
   function handleStart() {
-    newGame('medium');
+    newGame(difficulty);
     navigate('/game');
   }
 
@@ -34,6 +56,18 @@ export default function HomePage() {
         </div>
         <h1 className={styles.title}>Sudoku</h1>
         <p className={styles.subtitle}>Entraîne ton cerveau !</p>
+        <div className={styles.difficulty} role="group" aria-label="Difficulté">
+          {DIFFICULTIES.map(({ value, label }) => (
+            <button
+              key={value}
+              className={`${styles.diffBtn} ${difficulty === value ? styles.diffBtnActive : ''}`}
+              onClick={() => handleDifficulty(value)}
+              aria-pressed={difficulty === value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <button className={styles.startBtn} onClick={handleStart}>
           Démarrer une partie
         </button>

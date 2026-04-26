@@ -7,15 +7,24 @@ import WinOverlay from '../components/WinOverlay';
 import { useSudoku } from '../context/SudokuContext';
 import styles from './GamePage.module.css';
 
+const DIFFICULTY_LABELS: Record<string, string> = {
+  easy: 'Facile',
+  medium: 'Moyen',
+  hard: 'Difficile',
+};
+
 export default function GamePage() {
-  const { isPaused, gameStatus } = useSudoku();
+  const { isPaused, gameStatus, difficulty } = useSudoku();
 
   return (
     <main className={styles.page}>
       {/* ────── PORTRAIT ────── */}
       <div className={styles.portrait}>
         <header className={styles.header}>
-          <h1 className={styles.pageTitle}>Sudoku</h1>
+          <div>
+            <h1 className={styles.pageTitle}>Sudoku</h1>
+            <span className={styles.difficultyBadge}>{DIFFICULTY_LABELS[difficulty]}</span>
+          </div>
           <Timer />
         </header>
 
@@ -40,7 +49,10 @@ export default function GamePage() {
 
         <aside className={styles.sidebar}>
           <div className={styles.sideHeader}>
-            <h1 className={styles.pageTitle}>Sudoku</h1>
+            <div>
+              <h1 className={styles.pageTitle}>Sudoku</h1>
+              <span className={styles.difficultyBadge}>{DIFFICULTY_LABELS[difficulty]}</span>
+            </div>
             <Timer />
           </div>
           <ToolBar />

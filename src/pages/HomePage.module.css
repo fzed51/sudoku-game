@@ -58,3 +58,32 @@
 .startBtn:active {
   transform: translateY(0);
 }
+
+.difficulty {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.diffBtn {
+  padding: 10px 20px;
+  border: 2px solid var(--color-border-thick);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--color-given);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.diffBtn:hover {
+  background: var(--color-highlight);
+  border-color: var(--color-primary);
+}
+
+.diffBtnActive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}

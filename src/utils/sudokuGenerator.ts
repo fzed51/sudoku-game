@@ -3,8 +3,8 @@ import { type Board, isValid, countSolutions, deepCopyBoard } from './sudokuSolv
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 const CELLS_TO_REMOVE: Record<Difficulty, number> = {
-  easy: 36,
-  medium: 46,
+  easy: 30,
+  medium: 43,
   hard: 52,
 };
 
