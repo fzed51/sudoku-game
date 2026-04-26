@@ -34,6 +34,12 @@
   cursor: not-allowed;
 }
 
+.completed {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
 /* Paysage : grille 3×3 */
 @media (orientation: landscape) {
   .pad {
