@@ -1,0 +1,52 @@
+/* Portrait : ligne horizontale 1-9 */
+.pad {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1;
+  aspect-ratio: 1;
+  max-width: 48px;
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  font-weight: 500;
+  color: var(--color-primary);
+  background: var(--color-pad-bg);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--color-pad-hover);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Paysage : grille 3×3 */
+@media (orientation: landscape) {
+  .pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: auto;
+    min-width: 140px;
+  }
+
+  .btn {
+    max-width: none;
+    aspect-ratio: 1;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+  }
+}

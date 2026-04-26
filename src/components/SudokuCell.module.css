@@ -1,0 +1,69 @@
+.cell {
+  width: 100%;
+  aspect-ratio: 1;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: var(--color-bg);
+  transition: background-color 0.1s;
+  user-select: none;
+  position: relative;
+}
+
+.cell:hover {
+  background-color: var(--color-hover);
+}
+
+.highlighted {
+  background-color: var(--color-highlight);
+}
+
+.selected {
+  background-color: var(--color-selected) !important;
+}
+
+.given .value {
+  color: var(--color-given);
+  font-weight: 600;
+}
+
+.cell:not(.given) .value {
+  color: var(--color-user);
+}
+
+.sameNumber .value {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.conflict .value {
+  color: var(--color-conflict) !important;
+}
+
+.correct:not(.given) .value {
+  color: var(--color-user);
+}
+
+.value {
+  font-size: clamp(1rem, 3.5vw, 1.6rem);
+  line-height: 1;
+}
+
+/* Mode notes : grille 3×3 */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+  box-sizing: border-box;
+}
+
+.note {
+  font-size: clamp(0.4rem, 1.2vw, 0.65rem);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}

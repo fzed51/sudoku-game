@@ -1,0 +1,38 @@
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+}
+
+.btnSecondary,
+.btnPrimary {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btnSecondary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btnPrimary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btnSecondary:hover,
+.btnPrimary:hover {
+  opacity: 0.88;
+}
+
+.btnSecondary:active,
+.btnPrimary:active {
+  transform: scale(0.97);
+}

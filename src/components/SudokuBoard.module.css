@@ -1,0 +1,35 @@
+.wrapper {
+  width: 100%;
+  max-width: min(95vw, 50vh);
+}
+
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2.5px solid var(--color-border-thick);
+  table-layout: fixed;
+}
+
+/* Bordures épaisses entre blocs 3×3 */
+.board tr:nth-child(3n) td {
+  border-bottom: 2.5px solid var(--color-border-thick);
+}
+
+.board td:nth-child(3n) {
+  border-right: 2.5px solid var(--color-border-thick);
+}
+
+.board td {
+  border: 1px solid var(--color-border);
+}
+
+/* Correction: pas de doublon sur le bord droit */
+.board tr:nth-child(3n) td:last-child {
+  border-right: none;
+}
+
+@media (orientation: landscape) {
+  .wrapper {
+    max-width: min(60vw, 90vh);
+  }
+}
