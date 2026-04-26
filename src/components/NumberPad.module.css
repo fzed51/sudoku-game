@@ -40,8 +40,8 @@
   text-decoration: line-through;
 }
 
-/* Paysage : grille 3×3 */
-@media (orientation: landscape) {
+/* Paysage : grille 3×3 (mobile landscape court OU desktop large) */
+@media (orientation: landscape) and (max-height: 600px), (min-width: 900px) {
   .pad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

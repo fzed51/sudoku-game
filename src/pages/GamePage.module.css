@@ -69,8 +69,8 @@
   border-radius: 16px;
 }
 
-/* ── PAYSAGE ── */
-@media (orientation: landscape) and (max-height: 600px) {
+/* ── PAYSAGE : mobile landscape court OU desktop large ── */
+@media (orientation: landscape) and (max-height: 600px), (min-width: 900px) {
   .portrait {
     display: none;
   }
@@ -81,6 +81,8 @@
     align-items: stretch;
     min-height: 100dvh;
     width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
     gap: 0;
   }
 
@@ -94,7 +96,7 @@
   }
 
   .sidebar {
-    width: 220px;
+    width: 240px;
     min-width: 200px;
     display: flex;
     flex-direction: column;

@@ -55,7 +55,7 @@
   line-height: 1.4;
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 600px), (min-width: 900px) {
   .toolbar {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
