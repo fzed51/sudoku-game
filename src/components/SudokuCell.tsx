@@ -32,6 +32,9 @@ export default function SudokuCell({ row, col }: Props) {
   const cellNotes = notes[row][col];
   const hasNotes = cellNotes.size > 0 && value === null;
 
+  // Note en gras si elle correspond au chiffre de la cellule sélectionnée
+  const highlightedNote = selectedValue;
+
   const cls = [
     styles.cell,
     isGiven ? styles.given : '',
@@ -49,7 +52,10 @@ export default function SudokuCell({ row, col }: Props) {
       {hasNotes ? (
         <div className={styles.notes}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
-            <span key={n} className={styles.note}>
+            <span
+              key={n}
+              className={`${styles.note} ${cellNotes.has(n) && n === highlightedNote ? styles.noteHighlighted : ''}`}
+            >
               {cellNotes.has(n) ? n : ''}
             </span>
           ))}

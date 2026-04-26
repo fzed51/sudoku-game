@@ -67,3 +67,8 @@
   justify-content: center;
   line-height: 1;
 }
+
+.noteHighlighted {
+  font-weight: 900;
+  color: var(--color-primary);
+}
