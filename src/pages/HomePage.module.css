@@ -89,26 +89,51 @@
 }
 
 .scores {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: 1fr 5ch 5ch;
+  column-gap: 20px;
+  row-gap: 2px;
   background: var(--color-highlight);
   border-radius: 12px;
-  padding: 10px 20px;
-  min-width: 200px;
+  padding: 10px 16px;
+  min-width: 240px;
+}
+
+.scoresHeader {
+  display: contents;
+}
+
+.scoresHeaderSpacer {
+  grid-column: 1;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.scoresColLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: right;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .scoreRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
+  display: contents;
+}
+
+.scoreRowActive .scoreLabel {
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 .scoreLabel {
   font-size: 0.82rem;
   color: var(--color-text-muted);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
 }
 
 .scoreValue {
@@ -116,4 +141,9 @@
   font-weight: 700;
   color: var(--color-given);
   letter-spacing: 0.05em;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 0;
 }

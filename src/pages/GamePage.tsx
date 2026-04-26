@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import SudokuBoard from '../components/SudokuBoard';
 import ToolBar from '../components/ToolBar';
 import NumberPad from '../components/NumberPad';
@@ -14,7 +15,46 @@ const DIFFICULTY_LABELS: Record<string, string> = {
 };
 
 export default function GamePage() {
-  const { isPaused, gameStatus, difficulty } = useSudoku();
+  const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell } = useSudoku();
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (gameStatus !== 'playing' || isPaused) return;
+
+      // Chiffres 1-9 (rangée du haut et pavé numérique)
+      const digitMatch = e.code.match(/^(?:Digit|Numpad)([1-9])$/);
+      if (digitMatch) {
+        e.preventDefault();
+        inputNumber(parseInt(digitMatch[1], 10));
+        return;
+      }
+
+      // Effacement
+      if (e.code === 'Backspace' || e.code === 'Delete') {
+        e.preventDefault();
+        erase();
+        return;
+      }
+
+      // Navigation par flèches
+      const arrowMap: Record<string, [number, number]> = {
+        ArrowUp: [-1, 0],
+        ArrowDown: [1, 0],
+        ArrowLeft: [0, -1],
+        ArrowRight: [0, 1],
+      };
+      if (e.code in arrowMap) {
+        e.preventDefault();
+        const [dr, dc] = arrowMap[e.code];
+        const row = selected ? Math.max(0, Math.min(8, selected.row + dr)) : 0;
+        const col = selected ? Math.max(0, Math.min(8, selected.col + dc)) : 0;
+        selectCell(row, col);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameStatus, isPaused, selected, inputNumber, erase, selectCell]);
 
   return (
     <main className={styles.page}>
