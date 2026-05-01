@@ -44,7 +44,7 @@
 }
 
 .value {
-  font-size: clamp(1rem, 3.5vw, 1.6rem);
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
   line-height: 1;
 }
 
