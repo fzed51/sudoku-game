@@ -48,7 +48,7 @@ export default function SudokuCell({ row, col }: Props) {
     .join(' ');
 
   return (
-    <td className={cls} onClick={() => selectCell(row, col)}>
+    <div className={cls} onClick={() => selectCell(row, col)}>
       {hasNotes ? (
         <div className={styles.notes}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
@@ -63,6 +63,6 @@ export default function SudokuCell({ row, col }: Props) {
       ) : (
         <span className={styles.value}>{value ?? ''}</span>
       )}
-    </td>
+    </div>
   );
 }
