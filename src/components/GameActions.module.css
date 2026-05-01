@@ -33,6 +33,33 @@
 }
 
 .btnSecondary:active,
-.btnPrimary:active {
+.btnPrimary:active,
+.btnDanger:active {
   transform: scale(0.97);
+}
+
+.btnDanger {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  background: var(--color-error, #e53935);
+  color: #fff;
+}
+
+.btnDanger:hover {
+  opacity: 0.88;
+}
+
+.confirmLabel {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text, #333);
+  white-space: nowrap;
 }
