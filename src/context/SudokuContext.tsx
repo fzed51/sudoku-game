@@ -2,6 +2,10 @@ import { createContext, useCallback, useContext, useEffect, useReducer, useRef }
 import { type Board, findConflicts, deepCopyBoard } from '../utils/sudokuSolver';
 import { type Difficulty, generatePuzzle } from '../utils/sudokuGenerator';
 
+export const INITIAL_HINTS = 3;
+export const ERROR_PENALTY_SECONDS = 30;
+export const HINT_PENALTY_SECONDS = 10;
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -19,6 +23,7 @@ export interface SudokuState {
   hintsLeft: number;
   notesMode: boolean;
   timer: number;
+  errorCount: number;
   isPaused: boolean;
   gameStatus: GameStatus;
   conflicts: Set<string>;
@@ -81,9 +86,10 @@ function createInitialState(difficulty: Difficulty = 'medium'): SudokuState {
     selected: null,
     notes: emptyNotes(),
     history: [],
-    hintsLeft: 3,
+    hintsLeft: INITIAL_HINTS,
     notesMode: false,
     timer: 0,
+    errorCount: 0,
     isPaused: false,
     gameStatus: 'playing',
     conflicts: new Set(),
@@ -115,6 +121,7 @@ function sudokuReducer(state: SudokuState, action: Action): SudokuState {
         history: [],
         conflicts: new Set(),
         timer: 0,
+        errorCount: 0,
         isPaused: false,
         gameStatus: 'playing',
         selected: null,
@@ -149,6 +156,7 @@ function sudokuReducer(state: SudokuState, action: Action): SudokuState {
         };
       }
 
+      const isError = action.num !== solution[row][col];
       const newBoard = deepCopyBoard(board);
       newBoard[row][col] = action.num;
 
@@ -178,6 +186,7 @@ function sudokuReducer(state: SudokuState, action: Action): SudokuState {
         conflicts,
         gameStatus: won ? 'won' : 'playing',
         history: [...state.history, snapshot],
+        errorCount: state.errorCount + (isError ? 1 : 0),
       };
     }
 
