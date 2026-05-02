@@ -74,6 +74,50 @@ function buildGiven(board: Board): boolean[][] {
 }
 
 // ---------------------------------------------------------------------------
+// SessionStorage persistence
+// ---------------------------------------------------------------------------
+
+const SESSION_KEY = 'sudoku-session';
+
+function serializeState(state: SudokuState): string {
+  return JSON.stringify({
+    ...state,
+    notes: state.notes.map(row => row.map(cell => Array.from(cell))),
+    history: state.history.map(h => ({
+      board: h.board,
+      notes: h.notes.map(row => row.map(cell => Array.from(cell))),
+    })),
+    conflicts: Array.from(state.conflicts),
+  });
+}
+
+function deserializeState(json: string): SudokuState {
+  const raw = JSON.parse(json) as Record<string, unknown>;
+  return {
+    ...(raw as Omit<SudokuState, 'notes' | 'history' | 'conflicts' | 'isPaused'>),
+    notes: (raw.notes as number[][][]).map(row =>
+      row.map(cell => new Set<number>(cell))
+    ),
+    history: (raw.history as { board: Board; notes: number[][][] }[]).map(h => ({
+      board: h.board,
+      notes: h.notes.map(row => row.map(cell => new Set<number>(cell))),
+    })),
+    conflicts: new Set<string>(raw.conflicts as string[]),
+    isPaused: false, // ne pas restaurer l'état pausé après un refresh
+  };
+}
+
+function loadSessionState(): SudokuState {
+  try {
+    const saved = sessionStorage.getItem(SESSION_KEY);
+    if (saved) return deserializeState(saved);
+  } catch {
+    // ignore
+  }
+  return createInitialState('medium');
+}
+
+// ---------------------------------------------------------------------------
 // Initial state
 // ---------------------------------------------------------------------------
 
@@ -304,9 +348,16 @@ interface SudokuContextValue extends SudokuState {
 const SudokuContext = createContext<SudokuContextValue | null>(null);
 
 export function SudokuProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(sudokuReducer, undefined, () =>
-    createInitialState('medium')
-  );
+  const [state, dispatch] = useReducer(sudokuReducer, undefined, loadSessionState);
+
+  // Persiste l'état dans sessionStorage à chaque changement
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, serializeState(state));
+    } catch {
+      // ignore les erreurs de quota ou de contexte privé
+    }
+  }, [state]);
 
   // Timer
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
