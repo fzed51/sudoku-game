@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useBlocker } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import SudokuBoard from '../components/SudokuBoard';
 import ToolBar from '../components/ToolBar';
 import NumberPad from '../components/NumberPad';
@@ -19,19 +18,25 @@ export default function GamePage() {
   const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell, undo, history: undoHistory, errorCount } = useSudoku();
 
   // Interception du bouton retour : annule la dernière action au lieu de naviguer
-  const blocker = useBlocker(({ historyAction }) =>
-    gameStatus === 'playing' && historyAction === 'POP'
-  );
+  const undoRef = useRef(undo);
+  undoRef.current = undo;
+  const undoHistoryRef = useRef(undoHistory);
+  undoHistoryRef.current = undoHistory;
 
   useEffect(() => {
-    if (blocker.state !== 'blocked') return;
-    if (undoHistory.length > 0) {
-      undo();
-      blocker.reset();
-    } else {
-      blocker.proceed();
+    if (gameStatus !== 'playing') return;
+    window.history.pushState(null, '');
+
+    function handlePopState() {
+      if (undoHistoryRef.current.length > 0) {
+        undoRef.current();
+        window.history.pushState(null, '');
+      }
     }
-  }, [blocker, undoHistory.length, undo]);
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [gameStatus]);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
