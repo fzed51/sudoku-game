@@ -16,7 +16,7 @@ const DIFFICULTY_LABELS: Record<string, string> = {
 };
 
 export default function GamePage() {
-  const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell, undo, history: undoHistory } = useSudoku();
+  const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell, undo, history: undoHistory, errorCount } = useSudoku();
 
   // Interception du bouton retour : annule la dernière action au lieu de naviguer
   const blocker = useBlocker(({ historyAction }) =>
@@ -81,7 +81,13 @@ export default function GamePage() {
             <h1 className={styles.pageTitle}>Sudoku</h1>
             <span className={styles.difficultyBadge}>{DIFFICULTY_LABELS[difficulty]}</span>
           </div>
-          <Timer />
+          <div className={styles.timerRow}>
+            <div className={styles.errorInfo}>
+              <span className={styles.errorLabel}>Erreurs</span>
+              <span className={styles.errorCount}>{errorCount}</span>
+            </div>
+            <Timer />
+          </div>
         </header>
 
         <div className={`${styles.boardWrapper} ${isPaused ? styles.blurred : ''}`}>
@@ -109,7 +115,13 @@ export default function GamePage() {
               <h1 className={styles.pageTitle}>Sudoku</h1>
               <span className={styles.difficultyBadge}>{DIFFICULTY_LABELS[difficulty]}</span>
             </div>
-            <Timer />
+            <div className={styles.timerRow}>
+              <div className={styles.errorInfo}>
+                <span className={styles.errorLabel}>Erreurs</span>
+                <span className={styles.errorCount}>{errorCount}</span>
+              </div>
+              <Timer />
+            </div>
           </div>
           <ToolBar />
           <NumberPad />

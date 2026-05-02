@@ -46,6 +46,34 @@
   letter-spacing: 0.03em;
 }
 
+.timerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.errorInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.errorLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.errorCount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ef4444;
+  line-height: 1;
+}
+
 .boardWrapper {
   width: 100%;
   max-width: 480px;
