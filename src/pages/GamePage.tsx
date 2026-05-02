@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useBlocker } from 'react-router-dom';
 import SudokuBoard from '../components/SudokuBoard';
 import ToolBar from '../components/ToolBar';
 import NumberPad from '../components/NumberPad';
@@ -15,7 +16,22 @@ const DIFFICULTY_LABELS: Record<string, string> = {
 };
 
 export default function GamePage() {
-  const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell } = useSudoku();
+  const { isPaused, gameStatus, difficulty, selected, inputNumber, erase, selectCell, undo, history: undoHistory } = useSudoku();
+
+  // Interception du bouton retour : annule la dernière action au lieu de naviguer
+  const blocker = useBlocker(({ historyAction }) =>
+    gameStatus === 'playing' && historyAction === 'POP'
+  );
+
+  useEffect(() => {
+    if (blocker.state !== 'blocked') return;
+    if (undoHistory.length > 0) {
+      undo();
+      blocker.reset();
+    } else {
+      blocker.proceed();
+    }
+  }, [blocker, undoHistory.length, undo]);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
