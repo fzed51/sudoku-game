@@ -6,6 +6,11 @@ import { SudokuProvider } from './context/SudokuContext'
 import HomePage from './pages/HomePage'
 import GamePage from './pages/GamePage'
 
+const routerBasename =
+  import.meta.env.BASE_URL === '/'
+    ? undefined
+    : import.meta.env.BASE_URL.replace(/\/$/, '')
+
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     void navigator.serviceWorker
@@ -20,7 +25,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/sudoku-game">
+    <BrowserRouter basename={routerBasename}>
       <SudokuProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />

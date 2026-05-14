@@ -1,0 +1,19 @@
+{
+  "name": "Sudoku Game",
+  "short_name": "Sudoku",
+  "description": "Jeu de Sudoku mobile-first avec plusieurs niveaux de difficulté.",
+  "id": "/sudoku-game/",
+  "start_url": "/sudoku-game/",
+  "scope": "/sudoku-game/",
+  "display": "standalone",
+  "background_color": "#eff6ff",
+  "theme_color": "#1e3a5f",
+  "icons": [
+    {
+      "src": "/sudoku-game/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
