@@ -36,7 +36,7 @@ self.addEventListener('install', (event) => {
         try {
           await cache.add(url);
         } catch (error) {
-          console.warn('Failed to cache optional asset:', url, error);
+          console.warn('Optional asset not cached (non-critical):', url, error);
         }
       }),
     );
@@ -93,7 +93,7 @@ self.addEventListener('fetch', (event) => {
       }
       return response;
     } catch {
-      return new Response(`Offline: ${request.url} unavailable`, {
+      return new Response(`Content unavailable offline: ${url.pathname}`, {
         status: 503,
         statusText: 'Offline',
         headers: { 'Content-Type': 'text/plain; charset=utf-8' },
