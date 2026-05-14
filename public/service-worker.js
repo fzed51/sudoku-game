@@ -3,7 +3,7 @@ const CACHE_VERSION = 'sudoku-game-v1';
 async function getPrecacheResources() {
   const appShell = self.registration.scope;
   const response = await fetch(appShell, { cache: 'reload' });
-  const html = await response.text();
+  const html = await response.clone().text();
   const assetUrls = Array.from(
     html.matchAll(/<(?:script|link)\b[^>]+(?:src|href)="([^"]+)"/g),
     ([, assetPath]) => new URL(assetPath, appShell).toString(),
@@ -15,20 +15,31 @@ async function getPrecacheResources() {
     urls: Array.from(new Set([
       appShell,
       `${appShell}index.html`,
-      `${appShell}favicon.svg`,
-      `${appShell}404.html`,
       ...assetUrls,
     ])),
+    optionalUrls: [
+      `${appShell}favicon.svg`,
+      `${appShell}404.html`,
+    ],
   };
 }
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_VERSION);
-    const { appShell, response, urls } = await getPrecacheResources();
+    const { appShell, response, urls, optionalUrls } = await getPrecacheResources();
     await cache.put(appShell, response.clone());
     await cache.put(`${appShell}index.html`, response);
     await cache.addAll(urls.filter((url) => url !== appShell && url !== `${appShell}index.html`));
+    await Promise.allSettled(
+      optionalUrls.map(async (url) => {
+        try {
+          await cache.add(url);
+        } catch {
+          // Optional assets should not block offline support.
+        }
+      }),
+    );
     await self.skipWaiting();
   })());
 });
@@ -82,7 +93,11 @@ self.addEventListener('fetch', (event) => {
       }
       return response;
     } catch {
-      return new Response('', { status: 503, statusText: 'Offline' });
+      return new Response('Service unavailable: offline', {
+        status: 503,
+        statusText: 'Offline',
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      });
     }
   })());
 });
