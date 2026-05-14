@@ -5,8 +5,8 @@ async function getPrecacheResources() {
   const response = await fetch(appShell, { cache: 'reload' });
   const html = await response.clone().text();
   const assetUrls = Array.from(
-    html.matchAll(/<(?:script|link)\b[^>]+(?:src|href)="([^"]+)"/g),
-    ([, assetPath]) => new URL(assetPath, appShell).toString(),
+    html.matchAll(/<(?:script|link)\b[^>]+(?:src|href)=(["'])([^"']+)\1/g),
+    ([, , assetPath]) => new URL(assetPath, appShell).toString(),
   ).filter((assetUrl) => new URL(assetUrl).origin === self.location.origin);
 
   return {
@@ -72,7 +72,8 @@ self.addEventListener('fetch', (event) => {
         const response = await fetch(request);
         await cache.put(request, response.clone());
         return response;
-      } catch {
+      } catch (error) {
+        console.warn('Navigation request served from cache after fetch failure:', request.url, error);
         return (await cache.match(request)) ?? (await cache.match(self.registration.scope));
       }
     })());
@@ -92,7 +93,8 @@ self.addEventListener('fetch', (event) => {
         await cache.put(request, response.clone());
       }
       return response;
-    } catch {
+    } catch (error) {
+      console.warn('Asset request unavailable while offline:', request.url, error);
       return new Response('Content unavailable offline', {
         status: 503,
         statusText: 'Offline',
