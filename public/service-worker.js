@@ -70,7 +70,7 @@ self.addEventListener('fetch', (event) => {
 
       try {
         const response = await fetch(request);
-        cache.put(request, response.clone());
+        await cache.put(request, response.clone());
         return response;
       } catch {
         return (await cache.match(request)) ?? (await cache.match(self.registration.scope));
@@ -89,11 +89,11 @@ self.addEventListener('fetch', (event) => {
       const response = await fetch(request);
       if (response.ok) {
         const cache = await caches.open(CACHE_VERSION);
-        cache.put(request, response.clone());
+        await cache.put(request, response.clone());
       }
       return response;
     } catch {
-      return new Response(`Content unavailable offline: ${url.pathname}`, {
+      return new Response('Content unavailable offline', {
         status: 503,
         statusText: 'Offline',
         headers: { 'Content-Type': 'text/plain; charset=utf-8' },
