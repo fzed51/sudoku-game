@@ -35,8 +35,8 @@ self.addEventListener('install', (event) => {
       optionalUrls.map(async (url) => {
         try {
           await cache.add(url);
-        } catch {
-          // Optional assets should not block offline support.
+        } catch (error) {
+          console.warn('Failed to cache optional asset:', url, error);
         }
       }),
     );
@@ -93,7 +93,7 @@ self.addEventListener('fetch', (event) => {
       }
       return response;
     } catch {
-      return new Response('Service unavailable: offline', {
+      return new Response(`Offline: ${request.url} unavailable`, {
         status: 503,
         statusText: 'Offline',
         headers: { 'Content-Type': 'text/plain; charset=utf-8' },
