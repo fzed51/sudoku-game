@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import { SudokuProvider } from './context/SudokuContext'
 import HomePage from './pages/HomePage'
@@ -11,15 +12,11 @@ const basename =
     ? undefined
     : import.meta.env.BASE_URL.replace(/\/$/, '')
 
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    void navigator.serviceWorker
-      .register(`${import.meta.env.BASE_URL}service-worker.js`, {
-        scope: import.meta.env.BASE_URL,
-      })
-      .catch((error) => {
-        console.error('Service worker registration failed', error)
-      })
+if (import.meta.env.PROD) {
+  registerSW({
+    onRegisterError(error) {
+      console.error('Service worker registration failed', error)
+    },
   })
 }
 
